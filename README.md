@@ -1,0 +1,1 @@
+# HCLTech_key_takeaways
