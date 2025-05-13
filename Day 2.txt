@@ -1,0 +1,1210 @@
+CRUD Operations and Security operations using Spring Boot
+
+Install JDK (Java Development Kit). Java version should be above 17.
+Install MySQL (Install Community version).
+Install Postman Application.
+
+Create your Workspace folder
+	D drive
+	create folder by your name
+	under your name folder create folder SpringBootProjects
+	D:/John/SpringBootProjects
+
+Create Spring Boot Project
+	Open chrome browser and go the following website.
+	https://start.spring.io/
+		Project - Maven
+		Language - Java
+		Spring Boot - 3.4.5
+		Project Metadata
+		Group - com.cca.john
+		Artifact - book
+		Name - 
+		Description -
+		Package name - com.cca.john.book
+		Packaging - Jar
+		Java - 17
+	Dependencies
+		click Add Dependencies
+		enter Spring Web
+		select the first one.
+		click Generate
+	This will generate a project zip file in your sstem downloads folder.
+
+Extract Project zip folder to your workspace folder
+	Go to your downloads folder (open folder explorer, left hand side 'downloads' folder will be there).
+	Project zip file named book.zip will be there. Right click. click 'Extract all ...'
+	click 'browse' button. go to 'SpringBootProjects' folder under your name folder (created early). 
+	dont open the 'SpringBootProjects' folder. just select that folder. click 'Select Folder' button.
+	click extract.
+	'book' folder will be created under your 'SpringBootProjects' folder.
+
+Open your Workspace folder in Eclipse
+	Open Eclipse
+	File -> Switch Workspace
+	check your SpringBootProjects folder is selected. if not browse and select that folder.
+	click 'Launch'
+
+Open book project in eclipse
+	File -> Open Projects from File System...
+	click 'Directory' button.
+	go to your 'SpringBootProjects' folder. 
+	select 'book' folder. dont open it. click select folder.
+	click finish.
+
+Hello World Program in Console. 
+	Expand src/main/java/
+	Expand the base package com.cca.john.book
+	BookApplication.java - open by double click
+	Next to the line SpringApplication.run(StudentApplication.class, args);
+	type System.out.println("Hello World");
+	save file.
+	Run -> Run As -> Java Application
+	Click on Terminate button (red color button) in the console.
+	
+
+Create 4 packages - repositories, services, controllers and models 
+	Right click on base package com.cca.john.book
+	New -> Package -> Name: com.cca.john.book.repositories -> Finish
+	Right click on base package com.cca.john.book
+	New -> Package -> Name: com.cca.john.book.services -> Finish
+	Right click on base package com.cca.john.book
+	New -> Package -> Name: com.cca.john.book.controllers -> Finish
+	Right click on base package com.cca.john.book
+	New -> Package -> Name: com.cca.john.book.models -> Finish
+	
+	
+Create Classes and interfaces in repositories, services, controllers and models packages
+	Right click on repositories package
+	New -> Class -> Name: BookListRepository -> Finish
+	Right click on repositories package
+	New -> Interface -> Name: BookDBRepository -> Finish
+	Right click on repositories package
+	New -> Interface -> Name: BookCRUD -> Finish
+	Right click on services package
+	New -> Class -> Name: BookService -> Finish
+	Right click on controllers package
+	New -> Class -> Name: BookBrowserController -> Finish
+	Right click on controllers package
+	New -> Class -> Name: BookRESTController -> Finish
+	Right click on models package
+	New -> Class -> Name: Book -> Finish
+	Right click on models package
+	New -> Class -> Name: BookDto -> Finish
+	
+Create html files under src/main/resources/templates/book folder
+	Right click on templates folder -> New -> Folder -> Folder name: book -> Finish.
+	Right click on book folder -> New -> File -> File name: homePage.html -> Finish
+	Right click on book folder -> New -> File -> File name: bookList.html -> Finish
+	Right click on book folder -> New -> File -> File name: bookDetail.html -> Finish	
+	
+Fill those 3 html files with
+	<!doctype html>
+	<html>
+		<head>
+			<title>Book CRUD</title>
+		</head>
+		<body>
+			
+		</body>
+	</html>
+
+Create bookName data in BookListRepository 
+	Open BookListRepository.java
+	Create a private string object bookName inside the class.
+			private String bookName;
+	Inside the class, right click -> Source -> Generate Constructor from Superclass...
+		Assign your name in the constructor
+			bookName = "Spring Boot Learning by John";
+		Inside the class, right click -> Source -> Generate Getters and Setters...
+	SourceCode:
+		package com.cca.john.book.repositories;
+		public class BookListRepository {
+			private String bookName;
+			public BookListRepository() {
+				setBookName("Spring Boot by John");
+			}
+			public String getBookName() {
+				return bookName;
+			}
+			public void setBookName(String bookName) {
+				this.bookName = bookName;
+			}
+		}
+	Save it.
+	
+Create BookListRepository object in BookService
+	Open BookService.java 
+	Create a private BookListRepository object reference inside the class.
+		private BookListRepository repo;
+	Inside the class, right click -> Source -> Generate Constructor from Superclass...
+	Create BookListRepository object and assign to object reference in the default Constructor.
+		repo = new BookListRepository();
+	Import BookListRepository 
+		import com.cca.john.book.repositories.BookListRepository;
+	Create a method getBookName in the class. call BookListRepository getBookName and return the string.
+		public String getBookName() {
+			return repo.getBookName();
+		}
+	Source Code:
+		package com.cca.john.book.services;
+		import com.cca.john.book.repositories.BookListRepository;
+		public class BookService {
+			private BookListRepository repo;
+			public BookService(){
+				repo = new BookListRepository();
+			}
+			public String getBookName() {
+				return repo.getBookName();
+			}
+		}
+	Save it.
+
+Create BookService object in BookRESTController
+	Open BookRESTController.java 
+	Create a private BookService object reference inside the class.
+		private BookService service;
+	Inside the class, right click -> Source -> Generate Constructor from Superclass...
+	Create BookService object and assign to object reference in the default Constructor.
+		service = new BookService();
+	Import BookService class 
+		import com.cca.john.book.services.BookService;
+	Create a method getBookName in the class. call BookService getBookName and return the string.
+		public String getBookName() {
+			return repo.getBookName();
+		}
+	Source Code:
+		package com.cca.john.book.controllers;
+		import com.cca.john.book.services.BookService;
+		public class BookRESTController {
+			private BookService service;
+			public BookRESTController() {
+				service= new BookService();
+			}
+			public String getBookName() {
+				return service.getBookName();
+			}
+		}
+	Save it.
+
+Annotate BookRESTController to test in Postman and Browser.
+	Open BookRESTController.java
+	Annotate before the class name.
+		@RestController
+		@RequestMapping("/book/api")
+	Annotate before the method getBookName 
+		@GetMapping("/getbookname")
+	Import classes 
+		import org.springframework.web.bind.annotation.GetMapping;
+		import org.springframework.web.bind.annotation.RequestMapping;
+		import org.springframework.web.bind.annotation.RestController;
+	
+	Source Code:
+		package com.cca.john.book.controllers;
+
+		import org.springframework.web.bind.annotation.GetMapping;
+		import org.springframework.web.bind.annotation.RequestMapping;
+		import org.springframework.web.bind.annotation.RestController;
+
+		import com.cca.john.book.services.BookService;
+
+		@RestController
+		@RequestMapping("/book/api")
+		public class BookRESTController {
+			private BookService service;
+			
+			public BookRESTController() {
+				service= new BookService();
+			}
+			@GetMapping("/getbookname")
+			public String getBookName() {
+				return service.getBookName();
+			}
+		}
+	Save it.
+
+Test getBookName method from Postman and Browser
+	Open Postman
+		Operation: GET
+		URL: http://localhost:8080/book/api/getbookname 
+		Click Send button.
+	Open Browser
+		URL: http://localhost:8080/book/api/getbookname 
+	
+
+Change the POJO classes (Repository, Service and Controller) as Spring Beans.
+	Open BookListRepository.java 
+		Annotate the class with @Repository 
+		Import class 
+			import org.springframework.stereotype.Repository;
+	Open BookService.java
+		Annotate the class with @Service 
+		Import class 
+			import org.springframework.stereotype.Service;
+	Open BookRESTController.java (this step is not needed because we already annotated as RestController)
+		Annotate the class with @Controller 
+		Import class 
+			import org.springframework.stereotype.Controller;
+
+Allow Spring Boot to do the Automatic Dependency Injection for Repository and Service objects.
+	Open BookService.java
+		Annotate the private BookListRepository object reference with @Autowired 
+		Remove the default constructor.
+	Open BookRESTController.java
+		Annotate the private BookService object reference with @Autowired 
+		Remove the default constructor.
+	
+Test again in Postman and Browser
+
+Book Model creation 
+	Open Book.java from package com.cca.john.book.models.
+	Create private data in the class.
+		public class Book {
+			private Long bno;
+			private String title;
+			private String author;
+			private Double price;
+		}
+	Generate parameterized and default constructors.
+		Right click inside the class -> Source -> Generate Constructors from Superclass... -> Finish 
+		Right click inside the class -> Source -> Generate Constructors using Fields... -> Finish 
+	Generate Setter and Getter Methods.
+		Right click inside the class -> Source -> Generate Getters and Setters
+		
+BookDto Model creation 
+	Open BookDto.java from package com.cca.john.book.models.
+	Create private data in the class.
+		public class Book {
+			private Long bno;
+			private String title;
+			private String author;
+			private Double price;
+		}
+	Generate parameterized and default constructors.
+		Right click inside the class -> Source -> Generate Constructors from Superclass... -> Finish 
+		Right click inside the class -> Source -> Generate Constructors using Fields... -> Finish 
+	Generate Setter and Getter Methods.
+		Right click inside the class -> Source -> Generate Getters and Setters		
+
+Interface BookCRUD.
+	Open BookCRUD.java from the package com.cca.john.book.repositories.
+	Provide the method signatures.
+		public interface BookCRUD<T1,T2> {
+			List<T1> readBooks();
+			void createBook(T1 book);
+			void updateBook(T1 book);
+			void deleteBook(T2 bno);
+			T1 getBookByBno(T2 bno);
+		}
+	Import classes
+		import java.util.List;
+	Save it.
+
+CRUD Implementation
+	Open BookListRepository.java
+		BookListRepository class should implement BookCRUD interface.
+			public class BookRepository implements BookCRUD<Book,Long> {}
+		Import classes
+			import com.cca.john.book.models.BookCRUD;
+			import com.cca.john.book.models.Book;
+		Add unimplemented methods
+			keep mouse pointer on class BookRepository 
+			click on 'Add unimplemented methods' in the quick fix.
+	Save it.
+	
+Create 4 book objects in an arraylist
+	Open BookRepository.java
+		Update the Constructor method 
+		@Repository
+public class BookListRepository implements BookCRUD<Book,Long> {
+	private String bookName;
+	private List<Book> books;
+	public BookListRepository() {
+		books = new ArrayList<Book>(Arrays.asList(
+				new Book(1L,"Java Core","Prashant",650.5),
+				new Book(2L,"JSP","Ashwini",750.5),
+				new Book(3L,"Spring Boot","Sakshi",950.5),
+				new Book(4L,"Angular","Harsha",850.5)));
+	}
+	Import classes 
+		import java.util.List;
+		import java.util.ArrayList;
+		import java.util.Arrays;
+		import org.springframework.stereotype.Repository;
+		import com.cca.john.book.models.Book;
+
+CRUD operations in REST Controller.
+	Read All Books operation 
+		Open BookListRepository.java
+			Implement readBooks method
+			@Override
+			public List<Book> readBooks() {
+				return books;
+			}
+		Open BookService.java
+			Add readBooks method
+			public List<Book> readBooks() {
+				return repo.readBooks();
+			}
+			Import classes 
+				import java.util.List;
+				import com.cca.john.book.models.Book
+		Open BookRESTController.java
+			Add readBooks method
+			public List<Book> readBooks() {
+				return service.readBooks();
+			}
+			Annotate @GetMapping("/readbooks") for the method readBooks
+			Import classes 
+				import java.util.List;
+				import com.cca.john.book.models.Book;
+		Test the program in Postman application and browser also.
+			Open Postman Application
+			Operation: GET
+			URL: http://localhost:8080/book/api/readbooks
+			Click Send button.
+	
+	Create Book operation 
+		Open BookListRepository.java
+			Implement createBook method
+			@Override
+			public void createBook(Book book) {
+				books.add(book);
+			}
+		Open BookService.java
+			Add createBook method
+			public void createBook(Book book) {
+				repo.createBook(book);
+			}
+		Open BookRESTController.java
+			Add createBook method. Annotate @PostMapping for the createBook method.
+			Annotate @RequestBody for the method parameters.
+				@PostMapping("/createbook")
+				public String createBook(@RequestBody Book book) {
+					service.createBook(book);
+					return "Success";
+				}
+			Import classes 
+				import org.springframework.web.bind.annotation.PostMapping;
+				import org.springframework.web.bind.annotation.RequestBody;
+		Test the program in Postman application and browser also.
+			Open Postman Application
+			Operation: POST
+			URL: http://localhost:8080/book/api/createbook
+			Request Body -> Select raw -> Select JSON -> Enter the content in the Request body.
+				{
+					"bno": 5,
+					"title": "Cyber Security",
+					"author": "Roshan",
+					"price": 770.5
+				}
+			Click Send button.
+			
+			Operation: Get
+			URL: http://localhost:8080/book/api/readbooks
+			Click Send button 
+			
+	Update Book operation 
+		Open BookListRepository.java
+			Implement updateBook method
+			@Override
+			public void updateBook(Book book) {
+				int index =0;
+				for(int i=0;i<books.size();i++) {
+					if(books.get(i).getBno() == book.getBno()) {
+						index = i;
+					}
+				}
+				books.set(index, book);
+			}
+		Open BookService.java
+			Add updateBook method
+			public void updateBook(Book book) {
+				repo.updateBook(book);
+			}
+		Open BookRESTController.java
+			Add updateBook method. Annotate @PutMapping for the updateBook method.
+			Annotate @RequestBody for the method parameters.
+				@PutMapping("/updatebook")
+				public String updateBook(@RequestBody Book book) {
+					service.updateBook(book);
+					return "Success";
+				}
+			Import classes 
+				import org.springframework.web.bind.annotation.PutMapping;
+				
+		Test the program in Postman application and browser also.
+			Open Postman Application
+			Operation: PUT
+			URL: http://localhost:8080/book/api/updatebook
+			Request Body -> Select raw -> Select JSON -> Enter the content in the Request body.
+				{
+					"bno": 2,
+					"title": "Java Server Pages",
+					"author": "Sivachandran",
+					"price": 777.5
+				}
+			Click Send button.
+			
+			Operation: Get
+			URL: http://localhost:8080/book/api/readbooks
+			Click Send button 
+
+	Delete Book operation 
+		Open BookListRepository.java
+			Implement deleteBook method
+			@Override
+			public void deleteBook(Long bno) {
+				int index =0;
+				for(int i=0;i<books.size();i++) {
+					if(books.get(i).getBno() == bno) {
+						index = i;
+					}
+				}
+				books.remove(index);
+			}
+		Open BookService.java
+			Add deleteBook method
+			public void deleteBook(Long bno) {
+				repo.deleteBook(bno);
+			}
+		Open BookRESTController.java
+			Add deleteBook method
+			@DeleteMapping("deletebook")
+			public String deleteBook(@RequestParam Long bno) {
+				service.deleteBook(bno);
+				return "Success";
+			}
+			/*@DeleteMapping("/deletebook/{bno}")
+			public void deleteBook(@PathVariable("bno") Long bno) {
+				service.deleteBook(bno);
+				URL: http://localhost:8080/book/api/deletebook/3
+			}*/
+			Annotate @DeleteMapping("/deletebook") for the method deleteBook
+			Import classes 
+				import org.springframework.web.bind.annotation.DeleteMapping;
+				import org.springframework.web.bind.annotation.RequestParam;
+				
+		Test the program in Postman application and browser also.
+			Open Postman Application
+			Operation: DELETE
+			URL: http://localhost:8080/book/api/deletebook?bno=3
+			Click Send button.
+	Get Book by Book No operation
+		Open BookListRepository.java 
+			Implement the method getBookByBno
+			@Override
+			public Book getBookByBno(Long bno) {
+				int index =0;
+				for(int i=0;i<books.size();i++) {
+					if(books.get(i).getBno() == bno) {
+						index = i;
+					}
+				}
+				return books.get(index);
+			}
+		Open BookService.java
+			Add getBookByBno method
+			public Book getBookByBno(Long bno) {
+				return repo.getBookByBno(bno);
+			}
+		Open BookRESTController.java
+			Add getBookByBno method 
+			@GetMapping("getbookbybno")
+			public Book getBookByBno(@RequestParam Long bno) {
+				return service.getBookByBno(bno);
+			}
+		Test the program in Postman application and browser also.
+			Open Postman Application
+			Operation: GET
+			URL: http://localhost:8080/book/api/getbookbybno?bno=3
+			Click Send button.
+
+Create Schema (john_book) in MySQL Workbench 
+
+Add Jpa and MySQL dependencies in pom.xml file
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-jpa</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>com.mysql</groupId>
+		<artifactId>mysql-connector-j</artifactId>
+		<scope>runtime</scope>
+	</dependency>
+
+Update Maven Project
+	Right click pom.xml file -> Update Project -> Finish
+
+Update src/main/resources/application.properties file
+Provide the database name (just now created schema name in MySQL Workbench) in the second line properly.
+	spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+	spring.datasource.url=jdbc:mysql://localhost:3306/john_book
+	spring.datasource.username=root
+	spring.datasource.password=Admin@123
+	spring.jpa.show-sql=true
+	spring.jpa.hibernate.ddl-auto=update
+	
+Java class to Entity
+	Open Book.java from models
+	Annotate @Entity and @Table before the class Book 
+		@Entity
+		@Table(name="book")
+		public class Book {}
+	Annotate @Id and @GeneratedValue before the bno field
+		@Id
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
+		private Long bno;
+	Import classes
+		import jakarta.persistence.Entity;
+		import jakarta.persistence.GeneratedValue;
+		import jakarta.persistence.GenerationType;
+		import jakarta.persistence.Id;
+		import jakarta.persistence.Table;
+	Save and Run. Open the MySQL Workbench and check student table is created.
+
+Interface BookDBRepository creation
+	Righ click the package com.cca.john.book.repositories -> New -> Interface -> Name: BookDBRepository -> Finish 
+	BookDBRepository should extend JpaRepository<Book,Long> 
+	Annotate @Repository for the BookDBRepository Interface 
+	Declare a method getBookByBno
+	Import classes
+		import org.springframework.data.jpa.repository.JpaRepository;
+		import org.springframework.stereotype.Repository;
+		import com.cca.john.book.models.Book;
+	Source:
+		package com.cca.john.book.repositories;
+		import org.springframework.data.jpa.repository.JpaRepository;
+		import org.springframework.stereotype.Repository;
+		import com.cca.john.book.models.Book;
+		@Repository
+		public interface BookDBRepository extends JpaRepository<Book,Long>{
+			Book getBookByBno(Long bno);
+		}
+		
+CRUD operations in REST Controller with Database data.
+	Read All Books operation 
+		Open BookService.java 
+		Create private reference for BookDBRepository and annotate with @Autowired 
+			@Autowired
+			private BookDBRepository repoDB;
+		Change the readBooks method implementation as 
+			public List<Book> readBooks(boolean isDB){
+				if(!isDB)
+					return repo.readBooks();
+				else
+					return repoDB.findAll();
+			}
+		Open BookRESTController.java 
+			Change the readBooks method implementation as 
+			@GetMapping("/readbooks")
+			public List<Book> readBooks(@RequestParam boolean db) {
+				return service.readBooks(db);
+			}
+	Create Book operation 
+		Open BookService.java 
+		Change the createBook method implementation as 
+			public void createBook(Book book, boolean isDB) {
+				if(!isDB)
+					repo.createBook(book);
+				else
+					repoDB.save(book);
+			}
+		Open BookRESTController.java 
+			Change the createBook method implementation as 
+			@PostMapping("/createbook")
+			public String createBook(@RequestParam boolean db, @RequestBody Book book) {
+				service.createBook(book,db);
+				return "Success";
+			}
+	Update Book operation 
+		Open BookService.java 
+		Change the updateBook method implementation as 
+			public void updateBook(Book book,boolean isDB) {
+				if(!isDB)
+					repo.updateBook(book);
+				else
+					repoDB.save(book);
+			}
+		Open BookRESTController.java 
+			Change the updateBook method implementation as 
+			@PutMapping("/updatebook")
+			public String updateBook(@RequestParam boolean db, @RequestBody Book book) {
+				service.updateBook(book,db);
+				return "Success";
+			}
+	Delete Book operation 
+		Open BookService.java 
+		Change the deleteBook method implementation as 
+			public void deleteBook(Long bno,boolean isDB) {
+				if(!isDB)
+					repo.deleteBook(bno);
+				else
+					repoDB.deleteById(bno);
+			}
+		Open BookRESTController.java 
+			Change the deleteBook method implementation as 
+			@DeleteMapping("deletebook")
+			public String deleteBook(@RequestParam boolean db, @RequestParam Long bno) {
+				service.deleteBook(bno,db);
+				return "Success";
+			}
+	Get Book By Bno operation 
+		Open BookService.java 
+		Change the getBookByBno method implementation as 
+			public Book getBookByBno(Long bno,boolean isDB) {
+				if(!isDB)
+					return repo.getBookByBno(bno);
+				else
+					return repoDB.getBookByBno(bno);
+			}
+		Open BookRESTController.java 
+			Change the getBookByBno method implementation as 
+			@GetMapping("getbookbybno")
+			public Book getBookByBno(@RequestParam boolean db, @RequestParam Long bno) {
+				return service.getBookByBno(bno,db);
+			}
+			
+		
+Add Thymeleaf Dependency in the Pom.xml file
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-thymeleaf</artifactId>
+	</dependency>
+
+Update Maven Package
+	Right click on pom.xml file. 
+	Maven -> Update Project... -> Select your project is checked, Check 'Force Update of Snapshots/Releases -> Finish 
+
+Home Page html file creation
+	Create a folder 'book' under src/main/resources/templates.
+	Create a file named 'homePage.html' under book folder.
+	<!doctype html>
+	<html>
+		<head>
+			<title>Book App</title>
+		</head>
+		<body>
+			<h1>Spring Boot Book</h1>
+		</body>
+	</html>
+
+Book Name program in HTML UI (using Browser)
+	Open BookBrowserController.java 
+		
+		Create a method showHomePage in the class.
+			public String showHomePage() {
+				return "/book/homePage.html";
+			}
+		Annotate @Controller above the class BookBrowserController.
+		Annotate @RequestMapping("/book") above the class BookBrowserController.
+		Annotate @GetMapping({"","/"}) above the method showHomePage.
+		Import the classes:
+			import org.springframework.stereotype.Controller;
+			import org.springframework.web.bind.annotation.GetMapping;
+			import org.springframework.web.bind.annotation.RequestMapping;
+	Run the program.	
+	Test in Browser
+		Open Browser
+		URL: http://localhost:8080/book
+		
+Send Book Name from BookBrowserController class to homePage html page using Model.
+ 
+	Open BookBrowserController.java
+		Change the showHomePage method 
+		@GetMapping({"","/"})
+	public String showHomePage(Model model) {
+		model.addAttribute("myBook","Spring Boot by John");
+		return "/book/homePage1.html";
+	}
+	Import Model class:
+		import org.springframework.ui.Model;
+	Open homePage.html file
+	Change the body tag as:
+		<body>
+			<h2 th:text="${myBook}"></h2>
+		</body>
+	Test in Browser
+		Open Browser
+		URL: http://localhost:8080/book
+
+Include Dev Tools dependency
+	Copy following dependency and paste in the pom.xml 
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-devtools</artifactId>
+		<scope>runtime</scope>
+		<optional>true</optional>
+	</dependency>
+	Update Maven Package.
+	Save and Run.
+	
+	
+		
+Read All Books operation in Browser 
+	Open bookList.html from src/main/resources/templates/book folder
+	Update the bookList.html files as 
+	
+		<!doctype html>
+		<html>
+			<head>
+				<title>Books App</title>
+			</head>
+			<body>
+				<table border="2" width="80%">
+					<thead>
+						<tr>
+							<th>Book No</th>
+							<th>Title</th>
+							<th>Author</th>
+							<th>Price</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</body>
+		</html>
+	Open BookBrowserController.java
+		Add readBooks method
+			@GetMapping("/readbooks")
+			public String readBooks() {
+				return "/book/bookList.html";
+			}
+	Save. Run and test in browser. 
+		Open Browser
+		URL: http://localhost:8080/book/readbooks
+	
+	Bring Data to the book table.
+		Open BookBrowserController.java
+			Add private BookService reference in the controller class.. Annotate with Autowired.
+			@Autowired
+			private BookService service;
+		Modify readBooks method as 
+			@GetMapping("/readbooks")
+			public String readBooks(Model model) {
+				List<Book> books = service.readBooks(false);
+				model.addAttribute("books",books);
+				return "/book/bookList1.html";
+			}
+		Import classes.
+			import org.springframework.beans.factory.annotation.Autowired;
+			import org.springframework.ui.Model;
+			import com.cca.john.book.models.Book;
+			import com.cca.john.book.services.BookService;
+		Open bookList.html file from src/main/java/resources/templates/book folder 
+			Modify the tr under the tbody of the table.
+				<tr th:each="book:${books}">
+					<td th:text="${book.bno}"></td>
+					<td th:text="${book.title}"></td>
+					<td th:text="${book.author}"></td>
+					<td th:text="${book.price}"></td>
+					<td>
+						<a href="#">Update</a>
+						<a href="#" onclick="return confirm('Are you sure?')">Delete</a>
+					</td>
+				</tr>
+		Save it. Terminate the program if already running. Test it.
+			Open Browser and test it.
+			URL: http://localhost:8080/book/readbooks 
+			In the readBooks method pass 'false' parameter for local storage books. 'true' for data base books. 
+		Navigate to book list page from home page.
+			Open homePage.html file from src/main/java/resources/templates/book folder.
+			Include 2 buttons.
+				<body>
+					<h1>Book Management System</h1>
+					<h2 th:text="${myBook}"></h2>
+					<button onclick="location.href='/book/readbooks?db=false'">Read Books (Local Storage)</button>
+					<button onclick="location.href='/book/readbooks?db=true'">Read Books (Data Base)</button>
+				</body>
+			Open bookList.html file from src/main/java/resources/templates/book folder
+			Add two h1 tags before the table definition
+				<h1 th:if="${isDB}">Book List (Data Base)</h1>
+				<h1 th:unless="${isDB}">Book List (Local Storage)</h1>
+			Open BookBrowserController.java
+			Modify the readbooks method as 
+				@GetMapping("/readbooks")
+				public String readBooks(@RequestParam boolean db,Model model) {
+					List<Book> books = service.readBooks(db);
+					model.addAttribute("books",books);
+					model.addAttribute("isDB",db);
+					return "/book/bookList.html";
+				}
+			Keep a home button in the bookList.html file before the table definition.
+				<button onclick="location.href='/book'">Home</button>
+			Save it and Test it in the Browser.
+
+Create Book using Browser UI
+	Open bookList.html
+	Add 2 buttons before the table definition.
+		<button th:if="${isDB}" onclick="location.href='/book/createbook?db=true'">Create Book</button>
+		<button th:unless="${isDB}" onclick="location.href='/book/createbook?db=false'">Create Book</button>
+	Open bookDetail.html. Modify it as
+		<!doctype html>
+		<html>
+			<head>
+				<title>Book App</title>
+			</head>
+			<body>
+				<h1>Create Book</h1>
+				<form method="post" th:object="${bookDto}">
+					<table width="60%">
+						<tr>
+							<td>Book No:</td>
+							<td><input th:if="${!isDB}" th:field="${bookDto.bno}"></td>
+						</tr>
+						<tr>
+							<td>Title:</td>
+							<td><input th:field="${bookDto.title}"></td>
+						</tr>
+						<tr>
+							<td>Author:</td>
+							<td><input th:field="${bookDto.author}"></td>
+						</tr>
+						<tr>
+							<td>Price:</td>
+							<td><input th:field="${bookDto.price}"></td>
+						</tr>
+						<tr>
+							<td>
+								<button type="submit">Submit</button>
+							</td>
+							<td>
+								<a th:if="${isDB}" th:href="@{/book/readbooks?db=true}">Cancel</a>
+								<a th:unless="${isDB}" th:href="@{/book/readbooks?db=false}">Cancel</a>
+								<a th:href="@{/book/}">Home</a>
+							</td>
+						</tr>
+					</table>
+			</body>
+		</html>
+	Open BookBrowserController.java 
+		Add GetMapping and PostMapping methods for createBook 
+		@GetMapping("/createbook")
+		public String createBook(@RequestParam boolean db,Model model) {
+			model.addAttribute("isDB",db);
+			BookDto bookDto = new BookDto();
+			model.addAttribute("bookDto",bookDto);
+			return "/book/bookDetail.html";
+		}
+		@PostMapping("/createbook")
+		public String createBook(@RequestParam boolean db,@ModelAttribute BookDto bookDto) {
+			Book book = new Book();
+			book.setBno(bookDto.getBno());
+			book.setTitle(bookDto.getTitle());
+			book.setAuthor(bookDto.getAuthor());
+			book.setPrice(bookDto.getPrice());
+			service.createBook(book, db);
+			return "redirect:/book/readbooks?db=" + db;
+		}
+	Save it. Test it.
+
+Update Book using Browser UI 
+	Open bookList.html file from src/main/java/resources/templates/book folder 
+		Modify the action section as.
+			<td>
+				<a th:href="@{/book/updatebook(db=${isDB},bno=${book.bno})}">Update</a>
+				<a th:href="@{/book/deletebook(db=${isDB},bno=${book.bno})}" onclick="return confirm('Are you sure?')">Delete</a>
+			</td>
+	Open bookDetail.html file from src/main/java/resources/templates/book folder 
+		Add this th:if before the form
+			<h1 th:if="${isNew}">Create Book</h1>
+			<h1 th:unless="${isNew}">Update Book</h1>
+	Open BookBrowserController.java
+		Add the following line before the return statement of the GetMaapping of createStudent method 
+			model.addAttribute("isNew",isNew);
+		Add GetMapping and PostMapping methods for updateBook method
+			@GetMapping("/updatebook")
+			public String updateBook(@RequestParam boolean db, Model model, @RequestParam Long bno) {
+				Book book = service.getBookByBno(bno, db);
+				BookDto bookDto = new BookDto();
+				bookDto.setBno(book.getBno());
+				bookDto.setTitle(book.getTitle());
+				bookDto.setAuthor(book.getAuthor());
+				bookDto.setPrice(book.getPrice());
+				model.addAttribute(bookDto);
+				model.addAttribute("isDB",db);
+				model.addAttribute("isCreate",false);
+				return "/book/bookDetail.html";
+			}
+			@PostMapping("/updatebook")
+			public String updateBook(@RequestParam boolean db,@RequestParam Long bno, @ModelAttribute BookDto bookDto) {
+				Book book = service.getBookByBno(bno, db);
+				book.setTitle(bookDto.getTitle());
+				book.setAuthor(bookDto.getAuthor());
+				book.setPrice(bookDto.getPrice());
+				service.updateBook(book, db);
+				return "redirect:/book/readbooks?db=" + db;
+			}
+		Save it. Test it.
+	
+Delete Book using Browser UI.
+	Open BookBrowserController.java
+	Add GetMapping for the deleteBook method
+	@GetMapping("/deletebook")
+	public String deleteBook(@RequestParam boolean db,@RequestParam Long bno) {
+		service.deleteBook(bno, db);
+		return "redirect:/book/readbooks?db=" + db;
+	}
+	Save it. Test it.
+	
+Spring Security
+	Add Security dependency
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+	Save it. Run it.
+	Copy the generated password and login using the username as user.
+	Check the session id in the developer tools in chrome (F12)
+	
+Print the Session Id 
+	Open BookBrowserController.java 
+		model.addAttribute("mySession",req.getSession().getId()); - Call this method
+		HttpServletRequest req - Include this as method parameter
+		import jakarta.servlet.http.HttpServletRequest; - import this.
+	Open .html files
+		<h2 th:text="${mySession}"></h2> - add this in all the files.
+	Save it. Test it.
+
+
+User name and password in application.properties.
+	Include the following in the application.properties.
+		spring.application.name=SpringSecurity
+		spring.security.user.name=John
+		spring.security.user.password=1234
+	Save it. Test it. Also in Postman. user basic authentication.
+
+CSRF - Cross Site Request Forgery
+	Create, Update and Delete operations wont work in Browser and REST
+	To make it work.
+	Find the csrf token sent by server in the logout page.
+	Open BookBrowserController.java
+		@GetMapping("/csrf-token")
+		public CsrfToken getCsrfToken(HttpServletRequest req){
+			return (CsrfToken) req.getAttribute("_csrf");
+		}
+	Open Postman
+		Method: GET
+		Url: http://localhost:8080/book/api/csrf-token
+		Send Button.
+		Copy the csrf token.
+		
+		Method: POST
+		URL: http://localhost:8080/book/api/createbook?db=true
+		Request Authorization: username and passoword 
+		Request Body:
+			{   
+				"title": "Hibernate",
+				"author": "Prasanth",
+				"price": 555.0
+			}
+		Reqeust Header:
+			Key: X-CSRF-TOKEN
+			Value: paste the csrf token.
+		Send Button.
+		Check the newly created book available or not.
+		
+Customize Security Filter Chain.
+	Create new Package com.cca.john.book.configurations
+	Create new Class SecurityConfiguration under this package.
+		package com.cca.john.book.configurations;
+
+		import org.springframework.context.annotation.Bean;
+		import org.springframework.context.annotation.Configuration;
+		import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+		import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+		import org.springframework.security.web.SecurityFilterChain;
+
+		@Configuration
+		@EnableWebSecurity
+		public class SecurityConfiguration {
+			@Bean
+			public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+				return http.build();
+			}
+		}
+	Save it. Test it. Now login form wont come. but updation and creation not allowed. because of csrf.
+
+Disable csrf 
+	modify the securityFilterChain as:
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+		http.csrf(customizer -> customizer.disable());
+		return http.build();
+	}
+	Save and test.
+
+To prevent csrf enable same site strict in application.properties file.
+server.servlet.session.cookie.same-site=strict	
+
+Enable Authenticate and use Login form to authenticate.
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+		http.csrf(customizer -> customizer.disable());
+		http.authorizeHttpRequests(req -> req.anyRequest().authenticated());
+		http.formLogin(Customizer.withDefaults());
+		http.httpBasic(Customizer.withDefaults());
+		return http.build();
+	}
+	To enable authentication in Postman
+		http.httpBasic(Customizer.withDefaults());
+	To enable server to send new session id for each and every request
+		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		To test in postman
+			Open BookRESTController.java
+				@GetMapping("/getbookname")
+				public String getBookName(HttpServletRequest req) {
+					return service.getBookName() + req.getSession().getId();
+				}
+			Open Postman
+				Method: GET
+				URL:http://localhost:8080/book/api/getbookname
+				click Send Button multiple times. notice different session id generated.
+			Test in Browser
+				Problem is login is asking every time. 
+				for this issue comment out http.formLogin(Customizer.withDefaults());
+	change the securityFilterChain method as builder:
+		return http.csrf(customizer -> customizer.disable())
+				.authorizeHttpRequests(req -> req.anyRequest().authenticated())
+				//.formLogin(Customizer.withDefaults())
+				.httpBasic(Customizer.withDefaults())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.build();
+	Save it. Test it.
+	
+Multiple users. In Memory User Details Manager
+	Open SecurityConfiguration.java 
+	add the method userDetailsService
+		@Bean
+		public UserDetailsService userDetailsService() {
+			UserDetails user1=User.withDefaultPasswordEncoder().username("abc").password("abc").roles("USER").build();
+			UserDetails user2=User.withDefaultPasswordEncoder().username("def").password("def").roles("USER").build();
+			UserDetails user3=User.withDefaultPasswordEncoder().username("ghi").password("ghi").roles("USER").build();
+			//return new InMemoryUserDetailsManager(user1,user2,user3);
+			
+			List<UserDetails> users = new ArrayList<UserDetails>();
+			users.add(user1);
+			users.add(user2);
+			users.add(user3);
+			return new InMemoryUserDetailsManager(users);
+			
+		}
+	Save it. Test it.
+
+Multiple users. Using database.
+	Create new class 'AppUser' under com.cca.john.book.models package.
+	Create private members
+		private Long id;
+		private String name;
+		private String email;
+		private String password;
+	Generate default and parameterized constructors, getters and setters.
+	Annotate @Entity and @Table 
+		@Entity
+		@Table(name="user")
+		public class AppUser {
+	Annotate @Id and @GeneratedValue for the private member id.
+		@Id
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
+		private Long id;
+	Import classes:
+		import jakarta.persistence.Entity;
+		import jakarta.persistence.GeneratedValue;
+		import jakarta.persistence.GenerationType;
+		import jakarta.persistence.Id;
+		import jakarta.persistence.Table;
+	Create new class 'AppUserPrincipal' under com.cca.john.book.models package.
+		implement UserDetails interface 
+			public class AppUserPrincipal implements UserDetails {
+		implement unimplement methods.
+			SourceCode:
+			public class AppUserPrincipal implements UserDetails {
+	
+				private AppUser appUser;
+				
+				public AppUserPrincipal(AppUser appUser) {
+					this.appUser = appUser;
+				}
+				@Override
+				public Collection<? extends GrantedAuthority> getAuthorities() {
+					return Collections.singleton(new SimpleGrantedAuthority("USER"));
+				}
+				@Override
+				public String getPassword() {
+					return appUser.getPassword();
+				}
+				@Override
+				public String getUsername() {
+					return appUser.getEmail();
+				}
+			}
+		import classes:
+			import java.util.Collection;
+			import java.util.Collections;
+			import org.springframework.security.core.GrantedAuthority;
+			import org.springframework.security.core.authority.SimpleGrantedAuthority;
+			import org.springframework.security.core.userdetails.UserDetails;
+		Create interface 'MyUserDetailsRepository' under com.cca.john.book.models package.
+			Extend JpaRepository<AppUser,Long>
+			Annotate @Repository to the class 
+			Add a method getAppUserByEmail
+			Source Code:
+			package com.cca.john.book.repositories;
+
+			import org.springframework.data.jpa.repository.JpaRepository;
+			import org.springframework.stereotype.Repository;
+			import com.cca.john.book.models.AppUser;
+
+			@Repository
+			public interface MyUserDetailsRepository extends JpaRepository<AppUser,Long> {
+				AppUser getAppUserByEmail(String userName);
+			}
+		Create class 'MyUserDetailsService' under com.cca.john.book.models package.
+			implement UserDetailsService 
+			implement method loadUserByUsername
+			Autowire MyUserDetailsReository reference.
+			Source Code:
+				package com.cca.john.book.services;
+
+				import org.springframework.beans.factory.annotation.Autowired;
+				import org.springframework.security.core.userdetails.UserDetails;
+				import org.springframework.security.core.userdetails.UserDetailsService;
+				import org.springframework.security.core.userdetails.UsernameNotFoundException;
+				import org.springframework.stereotype.Service;
+				import com.cca.john.book.models.AppUserPrincipal;
+				import com.cca.john.book.repositories.MyUserDetailsRepository;
+
+				@Service
+				public class MyUserDetailsService implements UserDetailsService {
+					@Autowired
+					private MyUserDetailsRepository repo;
+					@Override
+					public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+						return new AppUserPrincipal(repo.getAppUserByEmail(userName));
+					}
+
+				}
+		Open SecurityConfiguration.java
+			Add Authentication Provider method 
+				@Bean
+				public AuthenticationProvider authenticationProvider() {
+					DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+					provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+					provider.setUserDetailsService(myUserDetailsService);
+					return provider;
+				}
+		Save it.
+		Run it. Terminate it.
+		Open MySQL Workbench. Add 2 users.
+		Run the application. login with the newly created used in db.
+		Also test in Postman.
+		

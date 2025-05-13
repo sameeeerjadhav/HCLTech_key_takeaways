@@ -1,0 +1,67 @@
+
+Day 2: CRUD Operations & Spring Security with Spring Boot
+
+Setup and Configuration
+- Installed: JDK (v17+), MySQL Community Edition, and Postman.
+- Project Initialization via start.spring.io:
+  - Spring Boot Version: 3.4.5
+  - Project Type: Maven, Language: Java
+  - Base Package: com.cca.john.book
+  - Dependencies: Spring Web, Spring Data JPA, MySQL Driver, Thymeleaf, Spring Security, DevTools
+
+Project Structure
+- Workspace: D:/<YourName>/SpringBootProjects/book
+- Packages created:
+  - models, repositories, services, controllers
+- HTML Files: homePage.html, bookList.html, bookDetail.html (placed under templates/book)
+
+Basic Program Execution
+- Ran a basic Spring Boot app with a Hello World print in console.
+
+Book App - CRUD Features
+1. Model Classes
+- Book and BookDto with fields: bno, title, author, price
+- Created Getters, Setters, and Constructors
+
+2. Repositories
+- BookCRUD (Generic CRUD interface)
+- BookListRepository: In-memory data (implements CRUD)
+- BookDBRepository: JPA repository for DB operations
+
+3. Service Layer
+- BookService acts as a bridge between controller and repository
+- Supports conditional execution using in-memory or DB logic
+
+4. Controller Layer
+- BookRESTController: Handles REST API calls using annotations like @GetMapping, @PostMapping, etc.
+- BookBrowserController: Handles Thymeleaf-based UI rendering
+
+5. Tested via Postman and Browser
+- GET /book/api/readbooks
+- POST /book/api/createbook
+- PUT /book/api/updatebook
+- DELETE /book/api/deletebook
+- GET /book/api/getbookbybno
+
+Browser Integration (Thymeleaf)
+- Book listing and creation integrated with UI using:
+  - Model to send/receive data
+  - HTML tables, form inputs, dynamic values via th:* tags
+- CRUD operations done via buttons and dynamic routing
+
+Spring Security
+- Added Spring Security Dependency
+- Customized login with hardcoded credentials in application.properties
+- Displayed session IDs on pages
+- Implemented CSRF protection and token fetching endpoint (/csrf-token)
+- Secured REST APIs using httpBasic() and formLogin() setups
+- Enabled stateless session management for Postman testing
+
+User Authentication
+1. In-Memory Users
+- Created 3 users (abc, def, ghi) via UserDetailsService
+
+2. Database-Backed Users
+- Created AppUser model and mapped to DB
+- Built AppUserPrincipal and MyUserDetailsService for Spring Security
+- Enabled DB authentication using AuthenticationProvider
